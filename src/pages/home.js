@@ -1,10 +1,20 @@
 import { Component } from "react-dom";
 import { Link } from "react-router-dom";
 import React from "react";
+import styled from "styled-components";
 import Menue from "../components/Navbar";
 import Button from "../components/Button";
+import Preloder from "../components/Preloder";
+import { getALL } from "../actions/render-vous";
+import { connect } from "react-redux";
+import { get } from "../actions/dossier";
 class Home extends React.Component {
+  componentDidMount() {
+    console.log(this.props.state.dossier);
+  }
+
   render() {
+    const table = this.props.state.renderVous;
     return (
       <>
         <Menue />;
@@ -21,52 +31,31 @@ class Home extends React.Component {
                   <tr>
                     <th scope="col">Nom </th>
                     <th scope="col">Prénom </th>
-                    <th scope="col">Date de néssance</th>
+                    <th scope="col">email</th>
                     <th scope="col">Numéro de téléphone</th>
                     <th scope="col">Action </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>2022</td>
-                    <td>1000</td>
-                    <td>2000</td>
-                    <td>1500</td>
+                  {table.map((item, i) => (
+                    <tr key={i}>
+                      <td>{item.nom}</td>
+                      <td>{item.prenom}</td>
 
-                    <td>
-                      <Button content="Consulter"></Button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2022</td>
-                    <td>1000</td>
-                    <td>2000</td>
-                    <td>1500</td>
+                      <td> {item.email} </td>
+                      <td> {item.email} </td>
+                      <td>{item.numero_telephone}</td>
 
-                    <td>
-                      <Button content="Consulter"></Button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2022</td>
-                    <td>1000</td>
-                    <td>2000</td>
-                    <td>1500</td>
-
-                    <td>
-                      <Button content="Consulter"></Button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>2022</td>
-                    <td>1000</td>
-                    <td>2000</td>
-                    <td>1500</td>
-
-                    <td>
-                      <Button content="Consulter"></Button>
-                    </td>
-                  </tr>
+                      <td>
+                        <Link to="/DossierMedicale">
+                          <Button
+                            content="Consulter"
+                            OnClick={this.props.get(item.numero_dossier)}
+                          ></Button>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -76,4 +65,12 @@ class Home extends React.Component {
     );
   }
 }
-export default Home;
+
+function mapStateToProps(state) {
+  console.log(state);
+
+  return {
+    state,
+  };
+}
+export default connect(mapStateToProps, { getALL, get })(Home);

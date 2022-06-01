@@ -7,26 +7,129 @@ import Input from "../components/Input";
 import logo from "../lg.png";
 import { Component } from "react-dom";
 import "../style.css";
-import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
-
+import { Form, InputGroup, Modal } from "react-bootstrap";
+import { connect } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { login } from "../actions/auth";
 class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.submit = this.submit.bind(this);
+    this.state = {
+      password: "",
+      email: "",
+      validate: false,
+    };
+  }
+  onChangeEmail(e) {
+    this.setState({
+      email: e.target.value,
+    });
+  }
+  onChangePassword(e) {
+    this.setState({
+      password: e.target.value,
+    });
+  }
+  submit = (e) => {
+    e.preventDefault();
+    if (
+      this.state.email != "" &&
+      this.state.password != " " &&
+      this.state.validate == true
+    ) {
+      const { dispatch, history } = this.props;
+
+      dispatch(login(this.state.email, this.state.password))
+        .then(() => {
+          console.log("connected");
+        })
+        .catch(() => {
+          console.log("errrrrrrrrrror");
+        });
+    }
+  };
   render() {
+    console.log(this.props);
+    const { isLoggedIn, message } = this.props;
+
+    if (isLoggedIn) {
+      return <Navigate to="/Home" />;
+    }
     return (
       <Boody className="Boody">
         <MainContainer>
           <WelcomeText>Welcome to </WelcomeText>
           <Logo src={logo} alt="" />
-          <InputContainer>
-            <Input type="text" placeholder="Email" />
-            <Input type="password" placeholder="Password" />
-          </InputContainer>
-          <ButtonContainer>
-            <Link style={{ width: "300px", textAlign: "center" }} to="/Home">
-              <Button content="Sign Up" />
-            </Link>
-          </ButtonContainer>
+          <Form
+            onSubmit={this.submit}
+            ref={(c) => {
+              this.form = c;
+            }}
+          >
+            <Form.Group className="mb-3" controlId="validationCustom01">
+              <InputGroup>
+                <Form.Control
+                  style={{
+                    background: "rgba(255, 255, 255, 0.15)",
+                    boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                    borderRadius: "2rem",
+                    width: "80%",
+                    height: "3rem",
+                    padding: "1rem",
+                    border: "none",
+                    outline: "none",
+                    color: "#3c354e",
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    marginBottom: "20px",
+                  }}
+                  required
+                  type="email"
+                  placeholder="Addresse e-mail"
+                  onChange={(e) => this.onChangeEmail(e)}
+                />
+              </InputGroup>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="validationCustom01">
+              <InputGroup>
+                <Form.Control
+                  style={{
+                    background: "rgba(255, 255, 255, 0.15)",
+                    boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                    borderRadius: "2rem",
+                    width: "80%",
+                    height: "3rem",
+                    padding: "1rem",
+                    border: "none",
+                    outline: "none",
+                    color: "#3c354e",
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    marginBottom: "20px",
+                  }}
+                  required
+                  type="password"
+                  placeholder="password"
+                  onChange={(e) => this.onChangePassword(e)}
+                />
+              </InputGroup>
+            </Form.Group>
 
-          <IconsContainer></IconsContainer>
+            <ButtonContainer>
+              <Button
+                type="submit"
+                onClick={(this.state.validate = true)}
+                content="Sign Up"
+              />
+              {/* <Link
+                style={{ width: "300px", textAlign: "center" }}
+                to="/Home"
+              ></Link> */}
+            </ButtonContainer>
+          </Form>
         </MainContainer>
       </Boody>
     );
@@ -134,4 +237,13 @@ const ForgotPassword = styled.h4`
   cursor: pointer;
 `;
 
-export default Login;
+function mapStateToProps(state) {
+  const { isLoggedIn } = state.auth;
+  const { message } = state.message;
+
+  return {
+    isLoggedIn,
+    message,
+  };
+}
+export default connect(mapStateToProps)(Login);

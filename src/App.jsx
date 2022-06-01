@@ -5,6 +5,7 @@ import Input from "./components/Input";
 import logo from "./logo.png";
 import Login from "./pages/authentif";
 import Home from "./pages/home";
+import Dossier from "./pages/dossier";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Login />}></Route>
         <Route path="/Home" element={<Home />}></Route>
+        <Route exact path="/DossierMedicale" element={<Dossier />}></Route>
       </Routes>
     </BrowserRouter>
   );
