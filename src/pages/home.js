@@ -10,9 +10,9 @@ import { connect } from "react-redux";
 import { get } from "../actions/dossier";
 class Home extends React.Component {
   componentDidMount() {
-    console.log(this.props.state.dossier);
+    const id = this.props.state.auth.user.data.id;
+    this.props.getALL(id);
   }
-
   render() {
     const table = this.props.state.renderVous;
     return (
@@ -43,14 +43,13 @@ class Home extends React.Component {
                       <td>{item.prenom}</td>
 
                       <td> {item.email} </td>
-                      <td> {item.email} </td>
                       <td>{item.numero_telephone}</td>
 
                       <td>
                         <Link to="/DossierMedicale">
                           <Button
                             content="Consulter"
-                            OnClick={this.props.get(item.numero_dossier)}
+                            onClick={this.props.get(item.numero_dossier)}
                           ></Button>
                         </Link>
                       </td>
@@ -67,8 +66,6 @@ class Home extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
-
   return {
     state,
   };
