@@ -17,19 +17,21 @@ class Dossier extends React.Component {
   render() {
     console.log(this.props.state.dossier.locked);
 
-    
-      
-        {this.props.state.dossier.locked==false? return( <Preloder/>): 
-        return(
-        <div className="App">
-          <h4>Le Dossier Médicale du patient en Pdf</h4>
-          <SinglePagePDFViewer pdf={samplePDF} />
-        </div>)
-        
-        }
-      
-    
-  
+    const l = this.props.state.dossier.locked;
+
+    return (
+      <>
+        {l && l == false ? (
+          <div className="App">
+            <h4>Le Dossier Médicale du patient en Pdf</h4>
+            <SinglePagePDFViewer pdf={samplePDF} />
+          </div>
+        ) : (
+          <Preloder />
+        )}
+      </>
+    );
+  }
 }
 function mapStateToProps(state) {
   return {
